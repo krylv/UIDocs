@@ -1,11 +1,12 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
-
+import { QueryClientProvider } from '@tanstack/react-query'
 import { routeTree } from './routeTree.gen'
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 import { ParticlesContainer } from './hooks/ParticlesContainer'
+import { queryClient } from './lib/react-query'
 // Create a new router instance
 export const router = createRouter({
   routeTree,
@@ -23,7 +24,9 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <ParticlesContainer />
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </StrictMode>,
   )
 }

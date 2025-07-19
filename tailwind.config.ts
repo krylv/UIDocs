@@ -6,6 +6,14 @@ export default {
 
   // Настройки темы
   theme: {
+    screens: {
+      // Кастомные breakpoints (можно добавить свои)
+      phoneS: '400px', // Extra small devices
+      phoneL: '640px', // Small tablets
+      tablet: '768px', // Tablets
+      laptop: '1024px', // Laptops
+      desktop: '1280px', // Desktops
+    },
     extend: {
       // Кастомные шрифты
       fontFamily: {

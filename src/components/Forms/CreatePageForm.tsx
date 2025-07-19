@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,23 +13,34 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import type { TCreateProjectForm } from './CreateProjectFormProps'
 import { usePostProject } from '@/api'
+import { usePostPage } from '@/api/mutations/pageMutation'
+import type { TCreatePageFormProps } from './CreatePageFormProps'
 
 const formSchema = z.object({
-  projectName: z.string().min(3).max(10),
+  pageName: z.string().min(3).max(20),
 })
 
-export function CreateProjectForm({ formClassName }: TCreateProjectForm) {
+export function CreatePageForm({
+  formClassName,
+  project_id,
+}: TCreatePageFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      projectName: '',
+      pageName: '',
     },
   })
 
-  const { mutate } = usePostProject()
+  const { mutate } = usePostPage()
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    mutate({ title: values.projectName, slug: `/${values.projectName}` })
+    console.log(values.pageName)
+
+    mutate({
+      title: values.pageName,
+      slug: `/${values.pageName}`,
+      project_id: Number(project_id),
+    })
   }
 
   return (
@@ -38,13 +48,13 @@ export function CreateProjectForm({ formClassName }: TCreateProjectForm) {
       <form onSubmit={form.handleSubmit(onSubmit)} className={formClassName}>
         <FormField
           control={form.control}
-          name="projectName"
+          name="pageName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Создать новый проект</FormLabel>
+              <FormLabel>Создать новую страницу</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Введите название проекта"
+                  placeholder="Введите название страницы"
                   className="active:border-none shadow-none"
                   {...field}
                 />
@@ -53,7 +63,7 @@ export function CreateProjectForm({ formClassName }: TCreateProjectForm) {
             </FormItem>
           )}
         />
-        <Button type="submit">Создать проект</Button>
+        <Button type="submit">Создать страницу</Button>
       </form>
     </Form>
   )
